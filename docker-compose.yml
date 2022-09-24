@@ -1,0 +1,47 @@
+---
+version: "3"
+
+services:
+  ## example Tor proxy service
+  tor-proxy:
+    container_name: tor-proxy
+    image: tor-service
+    environment:
+      ROLE: proxy
+      PROXY_PORT: 9050
+      PROXY_ADDRESS: 0.0.0.0
+      PROXY_ACCEPT: 10.1.0.0/24      
+    volumes:
+      - ./tor-proxy:/tor
+    ports:
+      - "9050:9050/tcp"
+    restart: unless-stopped
+
+  ## example Tor Onion/hidden service
+  tor-service:
+    container_name: tor-service
+    image: tor-service
+    environment:
+      ROLE: service
+      ONIONSERVICE_NAME: mywebservice
+      ONIONSERVICE_PORT: 80
+      ONIONSERVICE_HOST: 10.1.0.207:80
+      ONIONSERVICE_DIR: /tor/mywebservice
+    volumes:
+      - ./tor-service:/tor
+    restart: unless-stopped
+
+  ## example Tor control service
+  tor-control:
+    container_name: tor-control
+    image: tor-service
+    environment:
+      ROLE: control
+      CONTROL_PORT: 9051
+      CONTROL_PASSWORD: 'changeme'
+    volumes:
+      - ./tor-control:/tor
+    ports:
+      - "9051:9051/tcp"
+    restart: unless-stopped
+

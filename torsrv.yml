@@ -1,0 +1,17 @@
+---
+torsrv:
+  service:
+    testing:
+      Dir: /tor/hiddenservice
+      Vports:
+        80: '127.0.0.1:80'
+        22: '127.0.0.1:22'
+  proxy:
+    Port: '9050'
+    Address: '127.0.0.1'
+    Accept: 'accept 127.0.0.1,accept 10.0.0.0/8'
+    Reject: '*'
+  control:
+    Port: '9051'
+    Password: 'pass'
+    Cookie: True
